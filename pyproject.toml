@@ -1,0 +1,13 @@
+[project]
+name = "twitter-script"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "configparser>=7.2.0",
+    "selenium>=4.30.0",
+    "selenium-stealth>=1.0.6",
+    "setuptools>=78.1.0",
+    "undetected-chromedriver>=3.5.5",
+]
