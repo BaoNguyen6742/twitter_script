@@ -113,7 +113,7 @@ def switch_to_for_you_feed(driver):
                 By.XPATH,
                 "//div[@role='tablist']/div[@aria-selected='true']//span[contains(text(), 'For you')]",
             )
-            print("Already on For You feed")
+            ("Already on For You feed")
             return True
         except NoSuchElementException:
             pass

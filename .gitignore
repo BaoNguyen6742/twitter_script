@@ -12,3 +12,4 @@ wheels/
 *.zip
 chromedriver
 chromedriver-linux64
+*.log
