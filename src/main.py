@@ -1,20 +1,19 @@
-import time
 import configparser
+import pickle
 import random
+import time
 from datetime import datetime
-from selenium import webdriver
+
 import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-import pickle
-
-# webdriver.
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def save_cookie(driver, path):

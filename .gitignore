@@ -13,3 +13,4 @@ wheels/
 chromedriver
 chromedriver-linux64
 *.log
+.vscode/
