@@ -10,7 +10,8 @@ wheels/
 .venv
 
 *.zip
-chromedriver
-chromedriver-linux64
+chromedriver*
 *.log
 .vscode/
+*.yaml
+*.txt

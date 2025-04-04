@@ -5,13 +5,10 @@ import time
 from datetime import datetime
 
 import undetected_chromedriver as uc
-from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -471,7 +468,7 @@ def mute_and_block_user(driver, username):
                 print("Confirming mute...")
                 confirm_mute.click()
                 human_delay(2.0, 3.0)
-            except:
+            except Exception:
                 print("No mute confirmation needed")
                 pass
             print(f"Successfully muted @{username}")
@@ -509,7 +506,7 @@ def mute_and_block_user(driver, username):
                 print("Confirming block...")
                 confirm_block.click()
                 human_delay(2.0, 3.0)
-            except:
+            except Exception:
                 print("No block confirmation needed")
                 pass
             print(f"Successfully blocked @{username}")
@@ -536,7 +533,7 @@ def process_feed(driver, max_duration=None):
             for line in f:
                 safe_accounts.add(line.strip().lower())
         print(f"Loaded {len(safe_accounts)} safe accounts from saved file")
-    except:
+    except Exception:
         print("No saved safe accounts found. Starting fresh.")
 
     try:
@@ -544,7 +541,7 @@ def process_feed(driver, max_duration=None):
             for line in f:
                 blocked_accounts.add(line.strip().lower())
         print(f"Loaded {len(blocked_accounts)} blocked accounts from saved file")
-    except:
+    except Exception:
         print("No saved blocked accounts found. Starting fresh.")
 
     # Save account lists to file
@@ -583,7 +580,7 @@ def process_feed(driver, max_duration=None):
             # Check time limit
             current_runtime = time.time() - start_time
             if max_duration and (current_runtime > max_duration):
-                log_message = f"Reached maximum duration of {max_duration} seconds ({current_runtime/60:.1f} minutes). Stopping."
+                log_message = f"Reached maximum duration of {max_duration} seconds ({current_runtime / 60:.1f} minutes). Stopping."
                 print(log_message)
                 log_file.write(f"{log_message}\n")
                 break
@@ -600,7 +597,7 @@ def process_feed(driver, max_duration=None):
                     By.XPATH, "//article[@data-testid='tweet']"
                 )
                 print(f"Found {len(posts)} tweets in the feed")
-            except:
+            except Exception:
                 print("No posts found. Refreshing...")
                 driver.refresh()
                 human_delay(5.0, 8.0)
@@ -622,7 +619,7 @@ def process_feed(driver, max_duration=None):
                     posts_processed += 1
 
                     print(
-                        f"\n--- Processing Post #{posts_processed} ({post_index+1}/{current_batch_size}) ---"
+                        f"\n--- Processing Post #{posts_processed} ({post_index + 1}/{current_batch_size}) ---"
                     )
                     human_delay(1.0, 2.0)
 
@@ -634,7 +631,7 @@ def process_feed(driver, max_duration=None):
                         href = username_element.get_attribute("href")
                         username = href.split("/")[-1].lower()
                         print(f"Post author: @{username}")
-                    except:
+                    except Exception:
                         print("Couldn't determine post author, skipping")
                         continue
 
@@ -712,7 +709,7 @@ def process_feed(driver, max_duration=None):
                             if not posts:
                                 print("No posts found after returning to feed")
                                 break
-                        except:
+                        except Exception:
                             print("Couldn't find posts after returning to feed")
                             break
 
@@ -768,7 +765,7 @@ def process_feed(driver, max_duration=None):
                                 if not posts:
                                     print("No posts found after returning to feed")
                                     break
-                            except:
+                            except Exception:
                                 print("Couldn't find posts after returning to feed")
                                 break
 
@@ -824,7 +821,7 @@ def main():
     )
 
     if max_duration:
-        print(f"Script will run for a maximum of {max_duration/60:.1f} minutes")
+        print(f"Script will run for a maximum of {max_duration / 60:.1f} minutes")
 
     # Browser setup
     # chrome_options = Options()

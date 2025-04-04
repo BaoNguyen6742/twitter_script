@@ -10,7 +10,6 @@ def load_good_users():
         good_user = set()
     else:
         with open("src/twitter_block/config/good_user.txt", "r") as f:
-            line_count = sum(1 for line in f)
             f.seek(0)
             good_user = {line.strip() for line in f if line.strip()}
     good_count = len(good_user)
@@ -25,7 +24,6 @@ def load_bad_users():
         bad_user = set()
     else:
         with open("src/twitter_block/config/bad_user.txt", "r") as f:
-            line_count = sum(1 for line in f)
             f.seek(0)
             bad_user = {line.strip() for line in f if line.strip()}
     bad_count = len(bad_user)
@@ -34,5 +32,5 @@ def load_bad_users():
 
 
 def add_user_to_file(file, username):
-    with open(f"{file}_user.txt", "a") as f:
+    with open(f"src/twitter_block/config/{file}_user.txt", "a") as f:
         f.write(f"{username}\n")

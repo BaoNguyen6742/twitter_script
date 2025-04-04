@@ -1,8 +1,0 @@
-MIN_WAITING_TIME: 0.5 # Number of minimum section for wait
-VERBOSE: False # True|False
-chrome_driver: "chromedriver" # Path to the ChromeDriver executable
-chrome_profile_path: "~/.config/google-chrome" # Path to the Chrome profile directory
-profile_name: "Profile 3" # Name of the Chrome profile to use
-LOG_LEVEL: DEBUG
-MAX_POSTS: 100
-MAX_GOOD_USER_STREAK: 15

@@ -75,7 +75,7 @@ def check_user_status_in_network(driver, action, hover_card: EC.WebElement, user
         else:
             logger.debug(f"User @{username} is not in follower list and not in network")
             return FollowerStatus.NOT_FOLLOWING
-    except Exception as e:
+    except Exception:
         # print(f"Error finding username: {e}")
         logger.error("Error finding username")
         print(traceback.format_exc())
@@ -102,7 +102,7 @@ def check_user_status(driver, action, hover_card, username):
             # print(f"User @{username} is not in follower list")
             logger.debug(f"User @{username} is not in follower list")
             return FollowerStatus.NOT_FOLLOWING
-    except NoSuchElementException as e:
+    except NoSuchElementException:
         # print(f"Error finding username: {e}")
         # print("Username element not found")
         logger.error("Username element not found")

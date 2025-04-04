@@ -25,8 +25,10 @@ def main():
     action = webdriver.ActionChains(driver)
     goal_reached = False
     force_refresh = False
+    max_post_reset = False
+
     while True:
-        if not force_refresh:
+        if not force_refresh or max_post_reset:
             total_post = 0
             good_user_streak = 0
             num_batch = 0
@@ -50,20 +52,12 @@ def main():
             logger.info(f"Number of new posts: {len(investigate_posts)}")
             for post_idx, post in enumerate(investigate_posts):
                 print("\n")
-                try:
-                    driver.execute_script(
-                        "arguments[0].scrollIntoView({block: 'center'});",
-                        post,
-                    )
-                except Exception as e:
-                    logger.error(f"Error scrolling to post: {e}")
-                    continue
                 logger.info(
-                    f"{f"Processing post {total_post+1}/{config_value["MAX_POSTS"]}":-^50}"
+                    f"{f'Processing post {total_post + 1}/{config_value["MAX_POSTS"]}':-^50}"
                 )
-                logger.info(f"{f"Batch {num_batch+1}":-^50}")
+                logger.info(f"{f'Batch {num_batch + 1}':-^50}")
                 logger.info(
-                    f"{f"Processing batch {post_idx+1}/{len(investigate_posts)}":-^50}"
+                    f"{f'Processing batch {post_idx + 1}/{len(investigate_posts)}':-^50}"
                 )
                 logger.debug("Scroll to post")
 
@@ -112,17 +106,18 @@ def main():
                     goal_reached = True
                     break
                 total_post += 1
+                logger.debug(f"Good user streak: {good_user_streak}")
             if goal_reached:
                 break
             last_post_idx = total_post
             num_batch += 1
             human_delay(verbose=config_value["VERBOSE"])
-            logger.debug(f"Good user streak: {good_user_streak}")
 
         if goal_reached:
             break
         logger.info("Refreshing the page to load more posts")
         driver.refresh()
+        max_post_reset = total_post > config_value["MAX_POSTS"]
 
     logger.info("All posts processed")
 
