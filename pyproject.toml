@@ -13,3 +13,8 @@ dependencies = [
     "setuptools>=78.1.0",
     "undetected-chromedriver>=3.5.5",
 ]
+
+[dependency-groups]
+debug = [
+    "ipykernel>=6.29.5",
+]

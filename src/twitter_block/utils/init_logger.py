@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 import coloredlogs
 
@@ -7,7 +8,24 @@ from ..config import config_value
 
 # Set up the WebDriver
 def get_logger():
+    """
+    Generate a logger or return the existing one.
+
+    Behavior
+    --------
+    - If the logger already exists, it will return the existing logger.
+    - If the logger does not exist, it will create a new logger with the specified configuration.
+    - The logger will log messages to both a file and the console.
+    - The log level and format are configurable through the `config_value` dictionary.
+
+    Returns
+    -------
+    - logger: `logging.Logger`
+        The logger instance configured with the specified settings.
+    """
     logger = logging.getLogger("A_LOG")
+    if logger.hasHandlers():
+        return logger
     logger.setLevel(getattr(logging, config_value["LOG_LEVEL"]))
     logging.getLogger("selenium").setLevel(logging.WARNING)
     logging.getLogger("urllib3").setLevel(logging.WARNING)
@@ -52,4 +70,13 @@ def get_logger():
     return logger
 
 
-logger = get_logger()
+def clear_log():
+    """
+    Clear the log file if it exists.
+    
+    Behavior
+    --------
+    - If the log file `debug.log` exists, it will be deleted.
+    """
+    if Path("debug.log").exists():
+        Path("debug.log").unlink(missing_ok=True)

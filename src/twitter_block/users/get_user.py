@@ -11,41 +11,63 @@ from ..utils.human_timing import human_delay
 
 
 def get_user_name(driver, post):
+    """
+    Get the username and username element from a post.
+
+    Behavior
+    --------
+    1. Wait for the username element to be present in the post.
+    2. Scroll the username element into view.
+    3. Extract the username from the element's href attribute.
+
+
+    Parameters
+    ----------
+    - driver : `selenium.webdriver.Chrome`
+        The Selenium WebDriver instance.
+    - post : `WebElement`
+        The post element from which to extract the username.
+
+    Returns
+    -------
+    - username : `str`
+        The extracted username from the post. The name doesn't include the '@' symbol.
+    - username_element : `WebElement`
+        The username element found in the post. The user element is the `a` tag that contain the Display name, not the username.
+    """
     logger = logging.getLogger("A_LOG")
     try:
         # Find username
-        username_element_wait = WebDriverWait(
-            post, config_value["MIN_WAITING_TIME"] * 2
+        username_element_div = WebDriverWait(
+            post, config_value["MIN_WEB_WAITING_TIME"] * 2
         ).until(
-            EC.presence_of_element_located(
-                (By.XPATH, ".//div[@data-testid='User-Name']")
-            )
+            EC.presence_of_element_located((
+                By.XPATH,
+                "//div[@data-testid='User-Name']/div[1]",
+            ))
         )
         driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center'});",
-            username_element_wait,
+            (
+                "arguments[0].scrollIntoView({block: 'center', behavior: 'auto'});"
+                "window.scrollBy(0, window.innerHeight * 0.1);"
+            ),
+            username_element_div,
         )
         human_delay(verbose=config_value["VERBOSE"])
         logger.debug("Find user name")
-        username_element = username_element_wait.find_element(By.XPATH, ".//a")
-        # print(f"{username_element.text = }")
-        # user_name_a = username_element.find_element(By.XPATH, ".//a")
+        username_element = username_element_div.find_element(By.XPATH, ".//a")
         username = username_element.get_attribute("href").split("/")[-1]
         logger.debug(f"Post's user name @{username}")
         return username, username_element
     except NoSuchElementException:
-        # print(f"Error finding username: {e}")
-        # print("Username element not found")
         logger.error("Username element not found")
-        print(traceback.format_exc())
-        return None
+        logger.error(traceback.format_exc())
+        return None, None
     except TimeoutException:
-        # print("Page load timed out")
         logger.error("Page load timed out")
-        print(traceback.format_exc())
-        return None
+        logger.error(traceback.format_exc())
+        return None, None
     except Exception as e:
-        # print(f"An error occurred: {e}")
         logger.error(f"An error occurred: {e}")
-        print(traceback.format_exc())
-        return None
+        logger.error(traceback.format_exc())
+        return None, None

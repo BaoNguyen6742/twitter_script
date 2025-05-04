@@ -10,6 +10,19 @@ from ..config import config_value
 
 
 def initialize_twitter_browser():
+    """
+    Initialize the Twitter browser using undetected_chromedriver.
+
+    Behavior
+    --------
+    -  This function sets up the Chrome browser with specific options and user data directory.
+
+
+    Returns
+    -------
+    - driver : `WebDriver`
+        An instance of the Chrome WebDriver.
+    """
     logger = logging.getLogger("A_LOG")
     opt = uc.ChromeOptions()
     opt.binary_location = config_value["chrome_location"]
@@ -28,7 +41,10 @@ def initialize_twitter_browser():
     )
     driver.get("https://twitter.com")
     WebDriverWait(driver, 40).until(
-        EC.presence_of_element_located((By.XPATH, "//span[text()='For you']"))
+        EC.presence_of_element_located((
+            By.CSS_SELECTOR,
+            "[aria-label='Timeline: Your Home Timeline']",
+        ))
     )
 
     return driver
