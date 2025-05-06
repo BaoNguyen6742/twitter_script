@@ -42,13 +42,13 @@ def main() -> None:
         current_post = first_post
         while True:
             current_post_link = (
-                current_post.find_element(By.XPATH, "//time")
+                current_post.find_element(By.XPATH, ".//time")
                 .find_element(By.XPATH, "..")
                 .get_attribute("href")
             )
             logger.debug(f"Current post link: {current_post_link}")
 
-            next_post_link = get_next_post_link(driver, current_post)
+            next_post_link = get_next_post_link(current_post)
             if next_post_link is None:
                 logger.error("No more posts found. Exiting...")
                 status = ProgramStatus.NO_MORE_POSTS_FOUND
@@ -108,6 +108,7 @@ def main() -> None:
                 logger.error("No next post found. Exiting...")
                 status = ProgramStatus.NO_MORE_POSTS_FOUND
                 break
+            logger.debug("-" * 30)
         match status:
             case ProgramStatus.MAX_POSTS:
                 break

@@ -30,7 +30,7 @@ def set_next_post(driver, next_post_link):
         logger = logging.getLogger("A_LOG")
         # Wait for the next post to load
         next_post_link_element = WebDriverWait(driver, 40).until(
-            EC.presence_of_element_located((By.XPATH, f"//a[@href='{next_post_link}']"))
+            EC.presence_of_element_located((By.XPATH, f"//a[@href='{next_post_link.replace('https://x.com', '')}']"))
         )
         logger.info("Next post assigned")
 

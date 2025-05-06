@@ -43,7 +43,7 @@ def get_user_name(driver, post):
         ).until(
             EC.presence_of_element_located((
                 By.XPATH,
-                "//div[@data-testid='User-Name']/div[1]",
+                ".//div[@data-testid='User-Name']/div[1]",
             ))
         )
         driver.execute_script(

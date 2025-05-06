@@ -10,8 +10,9 @@ wheels/
 .venv
 
 *.zip
-chromedriver*
 *.log
 .vscode/
 *.yaml
 *.txt
+src/twitter_block/browser/user_data
+chrome*-win*

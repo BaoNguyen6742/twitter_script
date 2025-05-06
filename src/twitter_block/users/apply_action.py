@@ -1,6 +1,9 @@
 import logging
+import traceback
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from ..utils.follower_status import FollowerStatus
 from ..utils.load_user import add_user_to_file
@@ -81,6 +84,7 @@ def add_user_to_class(
         logger.debug(f"User @{username} is a bad user")
         bad_user_list.add(username)
         add_user_to_file("bad", username)
+        logger.debug(f"User @{username} added to bad user list")
         return
     if (
         follow_status == FollowerStatus.FOLLOWING
@@ -89,6 +93,7 @@ def add_user_to_class(
         logger.debug(f"User @{username} is a good user")
         good_user_list.add(username)
         add_user_to_file("good", username)
+        logger.debug(f"User @{username} added to good user list")
         return
 
 
@@ -109,26 +114,48 @@ def mute_and_block_user(driver, action, username_element):
     - username_element : `WebElement`
         The WebElement representing the username element.
     """
-    logger = logging.getLogger("A_LOG")
-    action.click(username_element).perform()
-    more_button = driver.find_element(
-        By.XPATH, "//div[@aria-label='More' and @role='button']"
-    )
-    action.click(more_button).perform()
-    more_menu = driver.find_element(By.XPATH, "//div[@role='menu'")
-    mute_button = more_menu.find_element(
-        By.XPATH, ".//div[@role='menuitem' and @data-testid='mute']"
-    )
-    action.click(mute_button).perform()
+    try:
+        logger = logging.getLogger("A_LOG")
+        # action.move_to_element(username_element).perform()
+        action.click(username_element).perform()
+        more_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@aria-label='More']"))
+        )
+        action.click(more_button).perform()
+        more_menu = driver.find_element(By.XPATH, "//div[@role='menu']")
 
-    action.click(more_button).perform()
-    block_button = more_menu.find_element(
-        By.XPATH, ".//div[@role='menuitem' and @data-testid='block']"
-    )
-    action.click(block_button).perform()
-    logger.debug("Muted and blocked user complete")
-    back_button = driver.find_element(
-        By.XPATH, "//button[@aria-label='Back' and @data-testid='app-bar-back']"
-    )
-    action.click(back_button).perform()
-    logger.debug("Back to the timeline complete")
+        mute_button = WebDriverWait(more_menu, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, ".//div[@role='menuitem' and @data-testid='mute']")
+            )
+        )
+        action.click(mute_button).perform()
+        logger.debug("Muted user complete")
+
+        action.click(more_button).perform()
+        more_menu = driver.find_element(By.XPATH, "//div[@role='menu']")
+
+        block_button = WebDriverWait(more_menu, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, ".//div[@role='menuitem' and @data-testid='block']")
+            )
+        )
+        action.click(block_button).perform()
+        confirm_block_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "//button[@role='button' and @data-testid='confirmationSheetConfirm']")
+            )
+        )
+        action.click(confirm_block_button).perform()
+        logger.debug("Blocked user complete")
+
+        logger.debug("Muted and blocked user complete")
+        back_button = driver.find_element(
+            By.XPATH, "//button[@aria-label='Back' and @data-testid='app-bar-back']"
+        )
+        action.click(back_button).perform()
+        logger.debug("Back to the timeline complete")
+    except Exception as e:
+        logger.error(f"Error muting and blocking user: {e}")
+        logger.error(traceback.format_exc())
+        return None
