@@ -1,0 +1,12 @@
+MIN_WAITING_TIME: 0.5 # Number of minimum second for wait
+MIN_WEB_WAITING_TIME: 10 # Number of minimum second for web wait
+VERBOSE: False # True|False
+chrome_location: './chrome-win64/chrome.exe' # Path to the Chrome executable
+chrome_driver: './chromedriver-win64/chromedriver.exe' # Path to the ChromeDriver executable
+chrome_profile_path: 'C:\Users\{User_name}\AppData\Local\Google\Chrome for Testing\User Data' # Path to the Chrome profile directory
+
+profile_name: "Default" # Name of the Chrome profile to use
+LOG_LEVEL: DEBUG
+MAX_POSTS: 1000
+MAX_POSTS_PER_RELOAD: 100 # Number of posts to load per reload
+MAX_GOOD_USER_STREAK: 30
